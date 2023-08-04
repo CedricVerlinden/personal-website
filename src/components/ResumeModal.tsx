@@ -1,8 +1,8 @@
-interface ResumeModal {
+interface ResumeType {
 	setModal: (value: boolean) => void;
 }
 
-const ResumeModal = ({ setModal }: ResumeModal) => {
+const ResumeModal = ({ setModal }: ResumeType) => {
 
 	const handleLanguage = (language: string) => {
 		window.open('/resume/' + language + ".pdf", '_blank');

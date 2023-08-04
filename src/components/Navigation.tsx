@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler } from "react";
 import ResumeModal from "./ResumeModal";
 
 interface NavigationProps {

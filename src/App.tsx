@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, MutableRefObject } from "react";
 
 import Navigation from "./components/Navigation";
+import ResumeModal from "./components/ResumeModal";
 
 const App = () => {
 	const [darkMode, setDarkMode] = useState(true || false);
@@ -84,7 +85,7 @@ const App = () => {
 			</div>
 
 			{/* All other shmuck */}
-			<div className="h-screen flex flex-col items-center bg-light-background p-8 dark:bg-dark-background transition-colors">
+			<div className={`${modal && 'blur-sm'} h-screen flex flex-col items-center bg-light-background p-8 dark:bg-dark-background transition-colors`}>
 				<img
 					onClick={handleThemeChange}
 					className="w-32 rounded-3xl"
@@ -103,18 +104,32 @@ const App = () => {
 						</p>
 					</div>
 					<div className="flex flex-col gap-2 w-full">
-						<button className="px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary">
+						<a
+							href="https://github.com/CedricVerlinden"
+							target="_blank"
+							rel="noreferrer"
+							className="text-center px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary"
+						>
 							📕 Projects
-						</button>
-						<button className="px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary">
+						</a>
+						<a
+							href="mailto:work@cedricverlinden.com"
+							rel="noreferrer"
+							className="text-center px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary"
+						>
 							📫 Contact
-						</button>
-						<button className="px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary">
+						</a>
+						<button
+							onClick={() => setModal(true)}
+							className="px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary"
+						>
 							🔗 Resume
 						</button>
 					</div>
 				</div>
 			</div>
+			
+			{modal && <ResumeModal setModal={setModal} />}
 		</>
 	);
 };
