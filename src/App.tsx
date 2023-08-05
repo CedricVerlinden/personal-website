@@ -1,137 +1,123 @@
-import { useState, useEffect, useRef, MutableRefObject } from "react";
+import { useEffect, useState } from 'react';
 
-import Navigation from "./components/Navigation";
-import ResumeModal from "./components/ResumeModal";
+import profile from './assets/profile.png';
 
-const App = () => {
-	const [darkMode, setDarkMode] = useState(true || false);
-	const [modal, setModal] = useState(false);
+function App() {
+  const [darkMode, setDarkMode] = useState(true || false);
 
-	const userTheme = localStorage.getItem("theme");
-	const systemTheme = window.matchMedia(
-		"(prefers-color-scheme: dark)"
-	).matches;
+  const userTheme = localStorage.getItem('theme');
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-	let sunIcon: MutableRefObject<Element | null> = useRef(null);
-	let moonIcon: MutableRefObject<Element | null> = useRef(null);
+  useEffect(() => {
+    if (userTheme === 'dark' || (!userTheme && systemTheme)) {
+      document.documentElement.classList.add('dark');
+      setDarkMode(true);
+      return;
+    }
 
-	useEffect(() => {
-		sunIcon.current = document.querySelector(".sun");
-		moonIcon.current = document.querySelector(".moon");
+    setDarkMode(false);
+  }, [userTheme, systemTheme]);
 
-		if (userTheme === "dark" || (!userTheme && systemTheme)) {
-			document.documentElement.classList.add("dark");
-			setDarkMode(true);
-			moonIcon.current?.classList.add("hidden");
-			return;
-		}
+  const handleDarkMode = () => {
+    if (darkMode) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setDarkMode(false);
+      return;
+    }
 
-		setDarkMode(false);
-		sunIcon.current?.classList.add("hidden");
-	}, [userTheme, systemTheme]);
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+    setDarkMode(true);
+  };
 
-	const iconToggle = () => {
-		sunIcon.current?.classList.toggle("hidden");
-		moonIcon.current?.classList.toggle("hidden");
-	};
-
-	const handleThemeChange = () => {
-		if (darkMode) {
-			document.documentElement.classList.remove("dark");
-			localStorage.setItem("theme", "light");
-			setDarkMode(false);
-			iconToggle();
-			return;
-		}
-
-		document.documentElement.classList.add("dark");
-		localStorage.setItem("theme", "dark");
-		setDarkMode(true);
-		iconToggle();
-	};
-
-	return (
-		<>
-			{/* Desktop */}
-			<div className="max-lg:hidden select-none bg-light-background pt-8 dark:bg-dark-background transition-colors">
-				<div className="container mx-auto h-screen">
-					<Navigation
-						modal={modal}
-						setModal={setModal}
-						onThemeChange={handleThemeChange}
-					/>
-					<div
-						className={` ${
-							modal && "blur-sm"
-						} flex h-full items-center justify-between px-32 pb-36`}
-					>
-						<div>
-							<p className="text-5xl text-light-text font-bold dark:text-dark-text">
-								Cédric Verlinden
-							</p>
-							<p
-								className={`text-2xl text-light-text dark:text-dark-text`}
-							>
-								Computer Science Student
-							</p>
-						</div>
-						<img
-							className="self-center rounded-3xl"
-							src="/assets/profile.png"
-							alt="AI Generated Cat"
-						/>
-					</div>
-				</div>
-			</div>
-
-			{/* All other shmuck */}
-			<div className={`${modal && 'blur-sm'} h-screen flex flex-col items-center bg-light-background p-8 dark:bg-dark-background transition-colors`}>
-				<img
-					onClick={handleThemeChange}
-					className="w-32 rounded-3xl"
-					src="/assets/profile.png"
-					alt="AI Generated Cat"
-				/>
-				<div className="w-full flex flex-col items-center pt-8 gap-12">
-					<div className="text-center">
-						<p className="text-3xl text-light-text font-bold dark:text-dark-text">
-							Cédric Verlinden
-						</p>
-						<p
-							className={`text-2xl text-light-text dark:text-dark-text`}
-						>
-							Computer Science Student
-						</p>
-					</div>
-					<div className="flex flex-col gap-2 w-full">
-						<a
-							href="https://github.com/CedricVerlinden"
-							target="_blank"
-							rel="noreferrer"
-							className="text-center px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary"
-						>
-							📕 Projects
-						</a>
-						<a
-							href="mailto:work@cedricverlinden.com"
-							rel="noreferrer"
-							className="text-center px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary"
-						>
-							📫 Contact
-						</a>
-						<button
-							onClick={() => setModal(true)}
-							className="px-24 py-6 w-full text-xl text-light-text bg-light-secondary rounded-xl dark:text-dark-text dark:bg-dark-secondary"
-						>
-							🔗 Resume
-						</button>
-					</div>
-				</div>
-			</div>
-			
-			{modal && <ResumeModal setModal={setModal} />}
-		</>
-	);
-};
+  return (
+    <div className="overflow-scroll bg-light-background dark:bg-dark-background">
+      <div className="container mx-auto flex h-[100svh] flex-col py-4">
+        <nav className="hidden w-full flex-row justify-center gap-6 rounded-lg bg-light-secondary p-6 shadow-sm dark:bg-dark-secondary lg:flex">
+          <a
+            href="https://github.com/CedricVerlinden"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xl text-light-text dark:text-dark-text"
+          >
+            📕 Projects
+          </a>
+          <a
+            href="mailto:work@cedricverlinden.com"
+            className="text-xl text-light-text dark:text-dark-text"
+          >
+            📫 Contact
+          </a>
+          <a
+            href="https://www.linkedin.com/in/cedricverlinden"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xl text-light-text dark:text-dark-text"
+          >
+            🔗 Resume
+          </a>
+        </nav>
+        <div className="lg:flex lg:h-full lg:flex-row-reverse lg:items-center lg:justify-between">
+          <div>
+            <img
+              src={profile}
+              alt="AI generated cat"
+              onClick={handleDarkMode}
+              className="mx-auto h-16 cursor-pointer rounded-lg sm:h-32 lg:h-[32em] lg:rounded-3xl"
+            />
+          </div>
+          <div className="flex h-full flex-col justify-center gap-6">
+            <div className="text-center">
+              <p className="text-4xl font-bold text-light-text dark:text-dark-text lg:text-5xl">
+                Cédric Verlinden
+              </p>
+              <p className="text-xl text-light-text dark:text-dark-text lg:text-2xl">
+                Computer Science Student
+              </p>
+            </div>
+            <div className="flex flex-col gap-6 px-10 lg:hidden">
+              <a
+                href="https://github.com/CedricVerlinden"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block w-full rounded-xl bg-light-secondary py-6 text-center text-xl text-light-text
+              shadow-sm transition-colors
+              hover:bg-light-primary
+              dark:bg-dark-secondary dark:text-dark-text
+              dark:hover:bg-dark-accent"
+              >
+                📕 Projects
+              </a>
+              <a
+                href="mailto:work@cedricverlinden.com"
+                className="inline-block w-full rounded-xl bg-light-secondary py-6 text-center text-xl text-light-text
+              shadow-sm transition-colors
+              hover:bg-light-primary
+              dark:bg-dark-secondary dark:text-dark-text
+              dark:hover:bg-dark-accent"
+              >
+                📫 Contact
+              </a>
+              <a
+                href="https://www.linkedin.com/in/cedricverlinden"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block w-full rounded-xl bg-light-secondary py-6 text-center text-xl text-light-text
+              shadow-sm transition-colors
+              hover:bg-light-primary
+              dark:bg-dark-secondary dark:text-dark-text
+              dark:hover:bg-dark-accent"
+              >
+                🔗 Resume
+              </a>
+            </div>
+            <div />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default App;
